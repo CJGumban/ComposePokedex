@@ -1,6 +1,9 @@
 package com.example.composepokedex.data.remote.response
 
+import com.google.gson.annotations.SerializedName
+
 data class GenerationViiX(
     val icons: IconsX,
-    val ultra-sun-ultra-moon: UltraSunUltraMoonX
+    @SerializedName("ultra-sun-ultra-moon")
+    val ultraSunUltraMoon: UltraSunUltraMoonX
 )
