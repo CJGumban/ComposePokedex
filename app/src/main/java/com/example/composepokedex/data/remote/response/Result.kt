@@ -1,6 +1,6 @@
 package com.example.composepokedex.data.remote.response
 
-data class AbilityXXX(
+data class Result(
     val name: String,
     val url: String
 )

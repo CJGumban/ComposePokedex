@@ -1,8 +1,11 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.compose.compiler)
     id("com.google.dagger.hilt.android")
     id("com.google.devtools.ksp")
+    alias(libs.plugins.kotlin.serialization)
+
 
 }
 
@@ -43,7 +46,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.14"
     }
     packaging {
         resources {
@@ -63,6 +66,8 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.compose)
+    implementation("androidx.navigation:navigation-runtime-ktx:2.7.7")
+
     implementation ("androidx.constraintlayout:constraintlayout-compose:1.0.1")
 
     //Retrofit
@@ -75,19 +80,22 @@ dependencies {
     implementation ("com.jakewharton.timber:timber:5.0.1")
 
     // Coroutines
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
 
+
     // Coroutine Lifecycle Scopes
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
-    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
+
+    /*    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
+    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")*/
 
     // Coil
-    implementation ("io.coil-kt:coil:2.6.0")
-    implementation ("com.google.accompanist:accompanist-coil:0.15.0")
+    implementation("io.coil-kt:coil-compose:2.6.0")
 
     //Dagger - Hilt
     implementation ("com.google.dagger:hilt-android:2.51.1")
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.appcompat)
     ksp("com.google.dagger:hilt-android-compiler:2.51.1")
     implementation ("androidx.hilt:hilt-navigation-compose:1.2.0")
 
@@ -99,4 +107,10 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation("androidx.paging:paging-runtime-ktx:3.3.0")
+    implementation("androidx.paging:paging-compose:3.3.0")
+    implementation(libs.kotlinx.serialization)
+
+
+
 }
