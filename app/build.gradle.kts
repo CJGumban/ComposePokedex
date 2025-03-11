@@ -110,6 +110,7 @@ dependencies {
     implementation("androidx.paging:paging-runtime-ktx:3.3.0")
     implementation("androidx.paging:paging-compose:3.3.0")
     implementation(libs.kotlinx.serialization)
+    implementation("com.google.accompanist:accompanist-drawablepainter:0.35.0-alpha")
 
 
 

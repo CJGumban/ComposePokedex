@@ -23,11 +23,28 @@ class PokemonListPagingSource @Inject constructor(
         try {
 
             val nextPageKey = params.key?.inc()?:1
-            val offset = params.key?.times(5)?:1
-            val response = pokeApi.getPokemonList(offset = offset, limit = 5)
+            val offset = params.key?.times(5)?:0
+            var response = pokeApi.getPokemonList(offset = offset, limit = 5)
+            var results: MutableList<Result> = mutableListOf()
+            response.results.forEachIndexed { index, result ->
+
+                val number = if(result.url.endsWith("/")){
+                    result.url.dropLast(1).takeLastWhile { it.isDigit() }
+                }else{
+                    result.url.takeLastWhile { it.isDigit() }
+                }
+
+           //     Timber.d("imgUrl: https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${number}.png")
+                results.add(result.copy(
+                    number = number.toInt(),
+                    imgUrl =   "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${number}.png"
+                ))
+                Timber.d("asdf res: ${results}")
+
+            }
 
             return LoadResult.Page(
-                data = response.results,
+                data = results,
                 nextKey = nextPageKey,
                 prevKey = null
             )
