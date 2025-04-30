@@ -11,6 +11,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
@@ -21,7 +22,7 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun ProvidePokemonRepo(
+    fun providePokemonRepo(
         api: PokeService
     ) = PokemonRepo(api)
 
@@ -37,6 +38,8 @@ object AppModule {
     @Singleton
     fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
         return OkHttpClient.Builder()
+            .connectTimeout(60L,TimeUnit.SECONDS)
+            .readTimeout(60L,TimeUnit.SECONDS)
             .addInterceptor(loggingInterceptor)
             .build()
     }
