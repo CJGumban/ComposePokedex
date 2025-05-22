@@ -1,11 +1,14 @@
 package com.example.composepokedex.di
 
+import android.content.Context
+import com.example.composepokedex.data.db.PokemonDb
 import com.example.composepokedex.data.remote.PokeService
 import com.example.composepokedex.repository.PokemonRepo
 import com.example.composepokedex.util.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -19,12 +22,17 @@ import javax.inject.Singleton
 object AppModule {
 
 
+    @Singleton
+    @Provides
+    fun providePrivateDatabase(@ApplicationContext context: Context) = PokemonDb.getInstance(context)
+
 
     @Singleton
     @Provides
     fun providePokemonRepo(
-        api: PokeService
-    ) = PokemonRepo(api)
+        api: PokeService,
+        pokemonDb: PokemonDb
+    ) = PokemonRepo(api,pokemonDb)
 
     @Singleton
     @Provides
