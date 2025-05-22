@@ -1,16 +1,20 @@
 package com.example.composepokedex.di
 
+import android.content.Context
+import com.example.composepokedex.data.db.PokemonDb
 import com.example.composepokedex.data.remote.PokeService
 import com.example.composepokedex.repository.PokemonRepo
 import com.example.composepokedex.util.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
@@ -18,12 +22,17 @@ import javax.inject.Singleton
 object AppModule {
 
 
+    @Singleton
+    @Provides
+    fun providePrivateDatabase(@ApplicationContext context: Context) = PokemonDb.getInstance(context)
+
 
     @Singleton
     @Provides
-    fun ProvidePokemonRepo(
-        api: PokeService
-    ) = PokemonRepo(api)
+    fun providePokemonRepo(
+        api: PokeService,
+        pokemonDb: PokemonDb
+    ) = PokemonRepo(api,pokemonDb)
 
     @Singleton
     @Provides
@@ -37,6 +46,8 @@ object AppModule {
     @Singleton
     fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
         return OkHttpClient.Builder()
+            .connectTimeout(60L,TimeUnit.SECONDS)
+            .readTimeout(60L,TimeUnit.SECONDS)
             .addInterceptor(loggingInterceptor)
             .build()
     }

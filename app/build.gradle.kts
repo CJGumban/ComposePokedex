@@ -56,6 +56,7 @@ android {
 }
 
 dependencies {
+    val room_version = "2.7.1"
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -110,8 +111,14 @@ dependencies {
     implementation("androidx.paging:paging-runtime-ktx:3.3.0")
     implementation("androidx.paging:paging-compose:3.3.0")
     implementation(libs.kotlinx.serialization)
-    implementation("com.google.accompanist:accompanist-drawablepainter:0.35.0-alpha")
+    implementation(libs.accompanist.drawablepainter)
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+    // optional - Test helpers
+    testImplementation(libs.androidx.room.testing)
 
-
+    // optional - Paging 3 Integration
+    implementation(libs.androidx.room.paging)
 
 }

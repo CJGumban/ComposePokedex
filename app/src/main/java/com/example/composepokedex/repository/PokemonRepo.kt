@@ -4,10 +4,9 @@ package com.example.composepokedex.repository;
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import com.example.composepokedex.data.db.PokemonDb
+import com.example.composepokedex.data.model.response.PokemonName
 import com.example.composepokedex.data.remote.PokeService
-import com.example.composepokedex.data.remote.response.Pokemon
-import com.example.composepokedex.data.remote.response.PokemonList
-import com.example.composepokedex.data.remote.response.Result
 import com.example.composepokedex.util.Constants.PAGE_SIZE
 import com.example.composepokedex.util.Response
 import dagger.hilt.android.scopes.ActivityScoped
@@ -19,22 +18,26 @@ import javax.inject.Inject
 
 interface IPokemonRepo {
 
-    suspend fun getPokemonList(limit: Int, offset: Int): Response<PokemonList>
+    suspend fun getPokemonList(limit: Int, offset: Int): Response<com.example.composepokedex.data.model.response.PokemonList>
 
-    suspend fun getPokemonListf(limit: Int, offset: Int): Flow<Response<PokemonList>>
-    suspend fun getPokemonInfo(pokemonName: String): Response<Pokemon>
-    suspend fun getPokemonInfof(pokemonName: String): Flow<Response<Pokemon>>
-
-    fun getPokemonListViaPaging(): Flow<PagingData<Result>>
+    suspend fun getPokemonListf(limit: Int, offset: Int): Flow<Response<com.example.composepokedex.data.model.response.PokemonList>>
+    suspend fun getPokemonInfo(pokemonName: String): Response<com.example.composepokedex.data.model.response.Pokemon>
+    suspend fun getPokemonInfof(pokemonName: String): Flow<Response<com.example.composepokedex.data.model.response.Pokemon>>
+    fun getPokemonListViaPaging(): Flow<PagingData<com.example.composepokedex.data.model.response.Result>>
+    suspend fun insertPokemonList(pokemons: List<PokemonName>)
+    suspend fun getPokemonNameList(name: String): Flow<List<PokemonName>>
+    suspend fun getAllPokemon():Flow<List<PokemonName>>
 }
 
 
 
 @ActivityScoped
 class PokemonRepo @Inject constructor(
-        private val PokeApi:PokeService
+    private val PokeApi:PokeService,
+    private val PokemonDb: PokemonDb
 ) :IPokemonRepo {
-    override suspend fun getPokemonList(limit: Int, offset: Int): Response<PokemonList> {
+
+    override suspend fun getPokemonList(limit: Int, offset: Int): Response<com.example.composepokedex.data.model.response.PokemonList> {
         val response = try {
             PokeApi.getPokemonList(limit, offset)
         } catch (e: Exception) {
@@ -42,8 +45,19 @@ class PokemonRepo @Inject constructor(
         }
         return Response.Success(response)
     }
+    override suspend fun insertPokemonList(pokemons: List<PokemonName>){
+        PokemonDb.pokemonDao().insert(pokemons)
+    }
 
-    override suspend fun getPokemonListf(limit: Int, offset: Int): Flow<Response<PokemonList>> =
+    override suspend fun getPokemonNameList(name: String): Flow<List<PokemonName>> {
+        return PokemonDb.pokemonDao().searchPokemon(name)
+    }
+
+    override suspend fun getAllPokemon():Flow<List<PokemonName>>  {
+        return PokemonDb.pokemonDao().getAllPokemon()
+    }
+
+    override suspend fun getPokemonListf(limit: Int, offset: Int): Flow<Response<com.example.composepokedex.data.model.response.PokemonList>> =
         flow {
             try {
                 val data = PokeApi.getPokemonList(limit, offset)
@@ -56,7 +70,7 @@ class PokemonRepo @Inject constructor(
             }
         }
 
-    override suspend fun getPokemonInfo(pokemonName: String): Response<Pokemon> {
+    override suspend fun getPokemonInfo(pokemonName: String): Response<com.example.composepokedex.data.model.response.Pokemon> {
         val response = try {
             PokeApi.getPokemonInfo(pokemonName)
         } catch (e: Exception) {
@@ -65,7 +79,7 @@ class PokemonRepo @Inject constructor(
         return Response.Success(response)
     }
 
-    override suspend fun getPokemonInfof(pokemonName: String): Flow<Response<Pokemon>> = flow{
+    override suspend fun getPokemonInfof(pokemonName: String): Flow<Response<com.example.composepokedex.data.model.response.Pokemon>> = flow{
         try {
             val data = PokeApi.getPokemonInfo(pokemonName)
             emit(Response.Success(data))
@@ -77,7 +91,7 @@ class PokemonRepo @Inject constructor(
         }
     }
 
-    override fun getPokemonListViaPaging(): Flow<PagingData<Result>> {
+    override fun getPokemonListViaPaging(): Flow<PagingData<com.example.composepokedex.data.model.response.Result>> {
         return Pager(
             PagingConfig(pageSize = PAGE_SIZE)
         ){
