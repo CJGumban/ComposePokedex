@@ -77,6 +77,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.example.composepokedex.R
+import com.example.composepokedex.data.model.response.Result
 import com.example.composepokedex.ui.composables.LoadingScreen
 import com.example.composepokedex.ui.composables.PokeSearchBar
 import com.example.composepokedex.ui.theme.Background
@@ -95,7 +96,7 @@ import java.text.DecimalFormat
 )
 @Composable
 fun PokemonListScreens(
-    pokemons: Flow<PagingData<com.example.composepokedex.data.model.response.Result>> = MutableStateFlow(PagingData.empty()),
+    pokemons: Flow<PagingData<Result>> = MutableStateFlow(PagingData.empty()),
     onBackClick: () -> Unit = {},
     onItemClick: () -> Unit = {},
     onSearchBarTextChange: (String) -> Unit = {}
@@ -286,7 +287,7 @@ fun PokemonListScreens(
 @OptIn(ExperimentalFoundationApi::class, ExperimentalLayoutApi::class)
 @Composable
 fun PokemonListScreen(
-    pokemons: Flow<PagingData<com.example.composepokedex.data.model.response.Result>> = MutableStateFlow(
+    pokemons: Flow<PagingData<Result>> = MutableStateFlow(
         PagingData.from(
             pokemonListPreviewData()
         )
@@ -320,7 +321,7 @@ fun PokemonListScreen(
 @SuppressLint("SuspiciousIndentation")
 @Composable
 fun PokemonList(
-    pokemons: Flow<PagingData<com.example.composepokedex.data.model.response.Result>> = MutableStateFlow(
+    pokemons: Flow<PagingData<Result>> = MutableStateFlow(
         PagingData.from(
             pokemonListPreviewData()
         )
@@ -379,7 +380,7 @@ fun PokemonList(
 @Preview(device = "id:pixel_8_pro", showBackground = true, showSystemUi = true)
 @Composable
 fun PokedexEntry(
-    entry: com.example.composepokedex.data.model.response.Result = com.example.composepokedex.data.model.response.Result(
+    entry: Result = Result(
         "Bulbasaur",
         200,
         "https://pokeapi.co/api/v2/pokemon/ditto",
@@ -471,79 +472,79 @@ private fun Int.toPokeDigit(): String {
 }
 
 
-fun pokemonListPreviewData(): List<com.example.composepokedex.data.model.response.Result> {
+fun pokemonListPreviewData(): List<Result> {
     return listOf(
-        com.example.composepokedex.data.model.response.Result(
+        Result(
             "Bulbasaur",
             200,
             "https://pokeapi.co/api/v2/pokemon/ditto",
             "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png"
-        ), com.example.composepokedex.data.model.response.Result(
+        ), Result(
             "Bulbasaur",
             200,
             "https://pokeapi.co/api/v2/pokemon/ditto",
             "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png"
-        ), com.example.composepokedex.data.model.response.Result(
+        ), Result(
             "Bulbasaur",
             200,
             "https://pokeapi.co/api/v2/pokemon/ditto",
             "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png"
-        ), com.example.composepokedex.data.model.response.Result(
+        ), Result(
             "Bulbasaur",
             200,
             "https://pokeapi.co/api/v2/pokemon/ditto",
             "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png"
-        ), com.example.composepokedex.data.model.response.Result(
+        ), Result(
             "Bulbasaur",
             200,
             "https://pokeapi.co/api/v2/pokemon/ditto",
             "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png"
-        ), com.example.composepokedex.data.model.response.Result(
+        ), Result(
             "Bulbasaur",
             200,
             "https://pokeapi.co/api/v2/pokemon/ditto",
             "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png"
-        ), com.example.composepokedex.data.model.response.Result(
+        ), Result(
             "Bulbasaur",
             200,
             "https://pokeapi.co/api/v2/pokemon/ditto",
             "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png"
-        ), com.example.composepokedex.data.model.response.Result(
+        ), Result(
             "Bulbasaur",
             200,
             "https://pokeapi.co/api/v2/pokemon/ditto",
             "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png"
-        ), com.example.composepokedex.data.model.response.Result(
+        ), Result(
             "Bulbasaur",
             200,
             "https://pokeapi.co/api/v2/pokemon/ditto",
             "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png"
-        ), com.example.composepokedex.data.model.response.Result(
+        ), Result(
             "Bulbasaur",
             200,
             "https://pokeapi.co/api/v2/pokemon/ditto",
             "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png"
-        ), com.example.composepokedex.data.model.response.Result(
+        ), Result(
             "Bulbasaur",
             200,
             "https://pokeapi.co/api/v2/pokemon/ditto",
             "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png"
-        ), com.example.composepokedex.data.model.response.Result(
+        ), Result(
             "Bulbasaur",
             200,
             "https://pokeapi.co/api/v2/pokemon/ditto",
             "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png"
-        ), com.example.composepokedex.data.model.response.Result(
+        ), Result(
             "Bulbasaur",
             200,
             "https://pokeapi.co/api/v2/pokemon/ditto",
             "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png"
-        ), com.example.composepokedex.data.model.response.Result(
+        ), Result(
             "Bulbasaur",
             200,
             "https://pokeapi.co/api/v2/pokemon/ditto",
             "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png"
-        ), com.example.composepokedex.data.model.response.Result(
+        ), Result(
             "Bulbasaur",
             200,
             "https://pokeapi.co/api/v2/pokemon/ditto",

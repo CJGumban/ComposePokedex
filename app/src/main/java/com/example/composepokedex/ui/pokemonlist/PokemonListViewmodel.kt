@@ -94,7 +94,7 @@ class PokemonListViewmodel @Inject constructor(
                             }
 
                             val url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${number}.png"
-                            PokedexListEntry(result.name, url, number.toInt())
+                            PokedexListEntry(number = number.toInt(), pokemonName =  result.name, imageUrl =  url)
                         }
                         curPage++
 
@@ -125,7 +125,7 @@ class PokemonListViewmodel @Inject constructor(
                         }
 
                         val url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${number}.png"
-                        PokedexListEntry(result.name, url, number.toInt())
+                        PokedexListEntry(number = number.toInt(), pokemonName =  result.name, imageUrl =  url)
                     }
                     curPage++
 
