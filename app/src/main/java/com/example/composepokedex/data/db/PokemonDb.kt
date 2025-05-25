@@ -4,20 +4,9 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.composepokedex.data.handlers.Loghandler
-import com.example.composepokedex.data.model.ParsedPokemon
-import com.example.composepokedex.data.model.PokedexListEntry
 import com.example.composepokedex.data.model.response.PokemonName
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.serialization.json.Json
-import timber.log.Timber
-import java.util.concurrent.Executors
 
-@Database(entities = [
-    PokemonName::class,
-    PokedexListEntry::class], version = 3)
+@Database(entities = [PokemonName::class], version = 1)
 abstract class PokemonDb : RoomDatabase() {
     abstract fun pokemonDao(): PokemonDao
 
@@ -29,17 +18,16 @@ abstract class PokemonDb : RoomDatabase() {
                 synchronized(PokemonDb::class) {
                     INSTANCE = Room.databaseBuilder(
                         context.applicationContext,
-                        PokemonDb::class.java, "pokemon-db.db")
-                        .createFromAsset("pokemon-db2_db.db")
+                        PokemonDb::class.java, "pokemon-db.db"
+                    )
+                        .createFromAsset("pokemon-list.db")
                         .fallbackToDestructiveMigration(true)
-                        .setQueryCallback({ sqlQuery, bindArgs ->
-                            Timber.tag("ROOM_QUERY SQL").d("ROOM_QUERY SQL: $sqlQuery \nArgs: $bindArgs")
-                        },Executors.newSingleThreadExecutor())
                         .build()
                 }
             }
-            return INSTANCE!!
+        return INSTANCE!!
         }
+
+
     }
 }
-

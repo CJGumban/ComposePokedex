@@ -1,5 +1,7 @@
-package com.example.composepokedex.data.api.service
+package com.example.composepokedex.data.remote
 
+import com.example.composepokedex.data.model.response.Pokemon
+import com.example.composepokedex.data.model.response.PokemonList
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

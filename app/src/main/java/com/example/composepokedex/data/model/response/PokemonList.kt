@@ -5,5 +5,5 @@ data class PokemonList(
     val count: Int?,
     val next: String?,
     val previous: Any?,
-    var results: List<Result>
+    var results: List<com.example.composepokedex.data.model.response.Result>
 )

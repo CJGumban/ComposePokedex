@@ -2,7 +2,7 @@ package com.example.composepokedex.di
 
 import android.content.Context
 import com.example.composepokedex.data.db.PokemonDb
-import com.example.composepokedex.data.api.service.PokeService
+import com.example.composepokedex.data.remote.PokeService
 import com.example.composepokedex.repository.PokemonRepo
 import com.example.composepokedex.util.Constants.BASE_URL
 import dagger.Module
