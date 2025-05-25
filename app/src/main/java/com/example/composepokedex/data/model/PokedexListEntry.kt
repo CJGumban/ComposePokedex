@@ -14,11 +14,11 @@ data class PokedexListEntry(
     val pokemonName: String,
     @SerializedName("url")
     val imageUrl: String,
-    val number: Int? = 0,
+    val number: Int = 0,
 
 )
 @Serializable
-data class parsedPockemon(
+data class ParsedPokemon(
     val name: String,
     val url: String
 )

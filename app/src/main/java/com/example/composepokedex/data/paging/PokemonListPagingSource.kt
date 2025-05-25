@@ -1,9 +1,9 @@
-package com.example.composepokedex.repository
+package com.example.composepokedex.data.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.composepokedex.data.model.response.Result
-import com.example.composepokedex.data.remote.PokeService
+import com.example.composepokedex.data.api.service.PokeService
 import retrofit2.HttpException
 import timber.log.Timber
 import java.io.IOException

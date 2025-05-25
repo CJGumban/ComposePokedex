@@ -9,12 +9,18 @@ import com.example.composepokedex.data.model.response.Pokemon
 import com.example.composepokedex.data.model.response.PokemonList
 import com.example.composepokedex.data.model.response.PokemonName
 import com.example.composepokedex.data.model.response.Result
-import com.example.composepokedex.data.remote.PokeService
+import com.example.composepokedex.data.api.service.PokeService
+import com.example.composepokedex.data.db.PokemonDao
+import com.example.composepokedex.data.model.PokedexListEntry
+import com.example.composepokedex.data.paging.PokedexPagingSource
+import com.example.composepokedex.data.paging.PokemonListPagingSource
 import com.example.composepokedex.util.Constants.PAGE_SIZE
 import com.example.composepokedex.util.Response
 import dagger.hilt.android.scopes.ActivityScoped
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import retrofit2.HttpException
 import javax.inject.Inject
 
@@ -30,13 +36,17 @@ interface IPokemonRepo {
     suspend fun insertPokemonList(pokemons: List<PokemonName>)
     suspend fun getPokemonNameList(name: String): Flow<List<PokemonName>>
     suspend fun getAllPokemon():Flow<List<PokemonName>>
+    fun getPokemonListViaRoomPaging(): Flow<PagingData<PokedexListEntry>>
+    fun getPokemonSearchListViaRoomPaging(query: String): Flow<PagingData<PokedexListEntry>>
+
+
 }
 
 
 
 @ActivityScoped
 class PokemonRepo @Inject constructor(
-    private val PokeApi:PokeService,
+    private val PokeApi: PokeService,
     private val PokemonDb: PokemonDb
 ) :IPokemonRepo {
 
@@ -59,6 +69,43 @@ class PokemonRepo @Inject constructor(
     override suspend fun getAllPokemon():Flow<List<PokemonName>>  {
         return PokemonDb.pokemonDao().getAllPokemon()
     }
+
+    override fun getPokemonListViaRoomPaging(): Flow<PagingData<PokedexListEntry>> {
+                return  Pager(
+                    config = PagingConfig(
+                        pageSize = 20,
+                        prefetchDistance = 9,
+                        enablePlaceholders = false,
+                        initialLoadSize = 20,
+                    ),
+                    initialKey = 1,
+                            pagingSourceFactory = {
+                                PokemonDb.pokemonDao().getPagedList2()
+                            }
+                )/*{
+
+                //    PokedexPagingSource(pokemonDao = PokemonDb.pokemonDao())
+
+                }*/.flow.flowOn(Dispatchers.IO)
+    }
+
+    override fun getPokemonSearchListViaRoomPaging(query: String): Flow<PagingData<PokedexListEntry>> {
+        return  Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                prefetchDistance = 9,
+                enablePlaceholders = false,
+                initialLoadSize = 20,
+            ),
+            initialKey = 1,
+            pagingSourceFactory = {
+                PokemonDb.pokemonDao().searchPokemon2(query)
+            }
+        )/*{
+
+                //    PokedexPagingSource(pokemonDao = PokemonDb.pokemonDao())
+
+                }*/.flow.flowOn(Dispatchers.IO)    }
 
     override suspend fun getPokemonListf(limit: Int, offset: Int): Flow<Response<PokemonList>> =
         flow {
@@ -102,5 +149,7 @@ class PokemonRepo @Inject constructor(
         }.flow
 
     }
+
+
 
 }

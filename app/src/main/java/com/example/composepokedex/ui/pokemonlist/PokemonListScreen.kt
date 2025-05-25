@@ -77,6 +77,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.example.composepokedex.R
+import com.example.composepokedex.data.model.PokedexListEntry
 import com.example.composepokedex.data.model.response.Result
 import com.example.composepokedex.ui.composables.LoadingScreen
 import com.example.composepokedex.ui.composables.PokeSearchBar
@@ -287,7 +288,7 @@ fun PokemonListScreens(
 @OptIn(ExperimentalFoundationApi::class, ExperimentalLayoutApi::class)
 @Composable
 fun PokemonListScreen(
-    pokemons: Flow<PagingData<Result>> = MutableStateFlow(
+    pokemons: Flow<PagingData<PokedexListEntry>> = MutableStateFlow(
         PagingData.from(
             pokemonListPreviewData()
         )
@@ -321,7 +322,7 @@ fun PokemonListScreen(
 @SuppressLint("SuspiciousIndentation")
 @Composable
 fun PokemonList(
-    pokemons: Flow<PagingData<Result>> = MutableStateFlow(
+    pokemons: Flow<PagingData<PokedexListEntry>> = MutableStateFlow(
         PagingData.from(
             pokemonListPreviewData()
         )
@@ -380,11 +381,10 @@ fun PokemonList(
 @Preview(device = "id:pixel_8_pro", showBackground = true, showSystemUi = true)
 @Composable
 fun PokedexEntry(
-    entry: Result = Result(
+    entry: PokedexListEntry = PokedexListEntry(
         "Bulbasaur",
+        "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png",
         200,
-        "https://pokeapi.co/api/v2/pokemon/ditto",
-        "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png"
     ),
 ) {
     val defaultDominantColor = MaterialTheme.colorScheme.surface
@@ -427,7 +427,7 @@ fun PokedexEntry(
             )
             val imageRequest = ImageRequest
                 .Builder(LocalContext.current)
-                .data(entry.imgUrl)
+                .data(entry.imageUrl)
 
                 .placeholder(R.drawable.img_loading_placeholder)
                 .crossfade(true)
@@ -451,7 +451,7 @@ fun PokedexEntry(
                 modifier = Modifier
                     .zIndex(5f)
                     .align(Alignment.CenterHorizontally),
-                text = entry.name,
+                text = entry.pokemonName,
 
                 )
         }
@@ -472,84 +472,84 @@ private fun Int.toPokeDigit(): String {
 }
 
 
-fun pokemonListPreviewData(): List<Result> {
+fun pokemonListPreviewData(): List<PokedexListEntry> {
     return listOf(
-        Result(
+        PokedexListEntry(
             "Bulbasaur",
+            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png",
             200,
-            "https://pokeapi.co/api/v2/pokemon/ditto",
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png"
-        ), Result(
+
+        ),PokedexListEntry(
             "Bulbasaur",
+            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png",
             200,
-            "https://pokeapi.co/api/v2/pokemon/ditto",
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png"
-        ), Result(
+
+        ),PokedexListEntry(
             "Bulbasaur",
+            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png",
             200,
-            "https://pokeapi.co/api/v2/pokemon/ditto",
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png"
-        ), Result(
+
+        ),PokedexListEntry(
             "Bulbasaur",
+            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png",
             200,
-            "https://pokeapi.co/api/v2/pokemon/ditto",
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png"
-        ), Result(
+
+        ),PokedexListEntry(
             "Bulbasaur",
+            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png",
             200,
-            "https://pokeapi.co/api/v2/pokemon/ditto",
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png"
-        ), Result(
+
+        ),PokedexListEntry(
             "Bulbasaur",
+            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png",
             200,
-            "https://pokeapi.co/api/v2/pokemon/ditto",
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png"
-        ), Result(
+
+        ),PokedexListEntry(
             "Bulbasaur",
+            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png",
             200,
-            "https://pokeapi.co/api/v2/pokemon/ditto",
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png"
-        ), Result(
+
+        ),PokedexListEntry(
             "Bulbasaur",
+            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png",
             200,
-            "https://pokeapi.co/api/v2/pokemon/ditto",
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png"
-        ), Result(
+
+        ),PokedexListEntry(
             "Bulbasaur",
+            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png",
             200,
-            "https://pokeapi.co/api/v2/pokemon/ditto",
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png"
-        ), Result(
+
+        ),PokedexListEntry(
             "Bulbasaur",
+            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png",
             200,
-            "https://pokeapi.co/api/v2/pokemon/ditto",
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png"
-        ), Result(
+
+        ),PokedexListEntry(
             "Bulbasaur",
+            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png",
             200,
-            "https://pokeapi.co/api/v2/pokemon/ditto",
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png"
-        ), Result(
+
+        ),PokedexListEntry(
             "Bulbasaur",
+            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png",
             200,
-            "https://pokeapi.co/api/v2/pokemon/ditto",
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png"
-        ), Result(
+
+        ),PokedexListEntry(
             "Bulbasaur",
+            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png",
             200,
-            "https://pokeapi.co/api/v2/pokemon/ditto",
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png"
-        ), Result(
+
+        ),PokedexListEntry(
             "Bulbasaur",
+            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png",
             200,
-            "https://pokeapi.co/api/v2/pokemon/ditto",
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png"
-        ), Result(
+
+        ),PokedexListEntry(
             "Bulbasaur",
+            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png",
             200,
-            "https://pokeapi.co/api/v2/pokemon/ditto",
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png"
-        )
+
+        ),
     )
 }
 
