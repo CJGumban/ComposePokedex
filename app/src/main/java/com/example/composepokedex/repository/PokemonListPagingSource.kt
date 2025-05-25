@@ -1,9 +1,8 @@
-package com.example.composepokedex.data.paging
+package com.example.composepokedex.repository
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.composepokedex.data.model.response.Result
-import com.example.composepokedex.data.api.service.PokeService
+import com.example.composepokedex.data.remote.PokeService
 import retrofit2.HttpException
 import timber.log.Timber
 import java.io.IOException
@@ -11,21 +10,21 @@ import javax.inject.Inject
 
 class PokemonListPagingSource @Inject constructor(
     private val pokeApi: PokeService
-) : PagingSource<Int, Result>(){
-    override fun getRefreshKey(state: PagingState<Int, Result>): Int? {
+) : PagingSource<Int, com.example.composepokedex.data.model.response.Result>(){
+    override fun getRefreshKey(state: PagingState<Int, com.example.composepokedex.data.model.response.Result>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             state.closestPageToPosition(anchorPosition)?.prevKey
 
         }
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Result> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, com.example.composepokedex.data.model.response.Result> {
         try {
 
             val nextPageKey = params.key?.inc()?:1
             val offset = params.key?.times(5)?:0
             var response = pokeApi.getPokemonList(offset = offset, limit = 5)
-            var results = mutableListOf<Result>()
+            var results: MutableList<com.example.composepokedex.data.model.response.Result> = mutableListOf()
             response.results.forEachIndexed { index, result ->
 
                 val number = if(result.url.endsWith("/")){

@@ -8,32 +8,22 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.palette.graphics.Palette
 import com.example.composepokedex.data.model.PokedexListEntry
-import com.example.composepokedex.data.api.service.PokeService
-import com.example.composepokedex.data.db.PokemonDao
-import com.example.composepokedex.data.model.response.Result
+import com.example.composepokedex.data.remote.PokeService
 import com.example.composepokedex.repository.PokemonRepo
 import com.example.composepokedex.util.Constants.PAGE_SIZE
 import com.example.composepokedex.util.Response
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import ph.theorangeco.data.models.states.UiState
 import javax.inject.Inject
@@ -41,27 +31,24 @@ import javax.inject.Inject
 @HiltViewModel
 class PokemonListViewmodel @Inject constructor(
     private val repo: PokemonRepo,
-        private val pokeApi: PokeService
+    private val pokeApi: PokeService
 ): ViewModel(){
 
     private var curPage = 0
 
-    //var pokemonList = mutableStateOf<List<PokedexListEntry>>(listOf())
+    var pokemonList = mutableStateOf<List<PokedexListEntry>>(listOf())
     var loadError = mutableStateOf("")
     var isLoading = mutableStateOf(false)
     var endReached = mutableStateOf(false)
 
-   // lateinit var pokemons: Flow<PagingData<PokedexListEntry>>
-
-  //  var pokemonList: Flow<PagingData<PokedexListEntry>>
-
+    var pokemons: Flow<PagingData<com.example.composepokedex.data.model.response.Result>>
     private var _pokemonNameList: MutableStateFlow<UiState> = MutableStateFlow(UiState.Initial)
     val pokemonNameList = _pokemonNameList.asStateFlow()
     var job: Job? = null
-    val _searchQuery = MutableStateFlow("")
     init {
      /*   loadPokemonPaginated()*/
        /* loadPokemonList()*/
+        pokemons = repo.getPokemonListViaPaging().cachedIn(viewModelScope)
         /*viewModelScope.launch{
             repo.insertPokemonList(
                 listOf(PokemonName("Pikachu"), PokemonName("Squirtle"),PokemonName("Baulbasaur"))
@@ -75,21 +62,21 @@ class PokemonListViewmodel @Inject constructor(
 
 
     }
-    @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
-    val pokemons = _searchQuery
-        .debounce(300)
-        .distinctUntilChanged()
-        .flatMapLatest{
-        repo.getPokemonSearchListViaRoomPaging(it).cachedIn(viewModelScope)
-    }
-
-
 
     fun getPokemonNameSuggestion(text: String){
-        _searchQuery.value = text
+        job?.cancel()
+
+        job = viewModelScope.launch(Dispatchers.IO) {
+                _pokemonNameList.value = UiState.Processing
+                delay(3000)
+                val local = repo.getPokemonNameList(text)
+                local.collectLatest {
+                    _pokemonNameList.value = UiState.Success(it)
+                }
+            }
 
     }
-  /*  fun loadPokemonList(){
+    fun loadPokemonList(){
         viewModelScope.launch {
             val result = repo.getPokemonListf(PAGE_SIZE, 2)
             result.collect(){
@@ -98,7 +85,7 @@ class PokemonListViewmodel @Inject constructor(
 
                     }
                     is Response.Success -> {
-                        val pokedexEntries = it.data?.results!!.mapIndexed{ index: Int, result: Result ->
+                        val pokedexEntries = it.data?.results!!.mapIndexed{ index: Int, result: com.example.composepokedex.data.model.response.Result ->
 
                             val number = if(result.url.endsWith("/")){
                                 result.url.dropLast(1).takeLastWhile { it.isDigit() }
@@ -107,7 +94,7 @@ class PokemonListViewmodel @Inject constructor(
                             }
 
                             val url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${number}.png"
-                            PokedexListEntry(number = number.toInt(), pokemonName =  result.name, imageUrl =  url)
+                            PokedexListEntry(result.name, url, number.toInt())
                         }
                         curPage++
 
@@ -119,36 +106,17 @@ class PokemonListViewmodel @Inject constructor(
                 }
             }
         }
-    }*/
-
-/*    fun loadPokedex(){
-        viewModelScope.launch {
-            val c = PokedexPagingSource(pokemonDao)
-            val page = Pager(
-                config = PagingConfig(
-                    pageSize = 20,
-                    prefetchDistance = 5,
-                    enablePlaceholders = false,
-                    initialLoadSize = 20,
-                ),
-                pagingSourceFactory = {
-                    c
-                },
-                initialKey = 1
-            ).flow
+    }
 
 
-        }
-    }*/
-
-   /* fun loadPokemonPaginated() {
+    fun loadPokemonPaginated() {
         viewModelScope.launch {
             isLoading.value = true
             val result = repo.getPokemonList(PAGE_SIZE, curPage * PAGE_SIZE)
             when(result) {
                 is Response.Success -> {
                     endReached.value = curPage * PAGE_SIZE >= result.data!!.count!!
-                    val pokedexEntries = result.data.results!!.mapIndexed{ index: Int, result: Result ->
+                    val pokedexEntries = result.data.results!!.mapIndexed{ index: Int, result: com.example.composepokedex.data.model.response.Result ->
 
                         val number = if(result.url.endsWith("/")){
                             result.url.dropLast(1).takeLastWhile { it.isDigit() }
@@ -157,7 +125,7 @@ class PokemonListViewmodel @Inject constructor(
                         }
 
                         val url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${number}.png"
-                        PokedexListEntry(number = number.toInt(), pokemonName =  result.name, imageUrl =  url)
+                        PokedexListEntry(result.name, url, number.toInt())
                     }
                     curPage++
 
@@ -176,7 +144,7 @@ class PokemonListViewmodel @Inject constructor(
 
             }
         }
-    }*/
+    }
 
 
 
@@ -188,8 +156,6 @@ class PokemonListViewmodel @Inject constructor(
             }
         }
     }
-
-
 
 
 }
