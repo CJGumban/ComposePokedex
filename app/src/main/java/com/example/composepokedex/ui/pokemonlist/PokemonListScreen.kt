@@ -294,7 +294,9 @@ fun PokemonListScreen(
         )
     ),
     onBackClick: () -> Unit = {},
-    onItemClick: () -> Unit = {},
+    onItemClick: (PokedexListEntry) -> Unit = {
+
+    },
     onSearchBarTextChange: (String) -> Unit = {}
 ) {
     var isDialogVisible by remember { mutableStateOf(true) }
@@ -312,7 +314,7 @@ fun PokemonListScreen(
         }
     ) { paddingValues ->
         Column(modifier = Modifier.background(Primary).padding(top = paddingValues.calculateTopPadding())) {
-            PokemonList(pokemons, onClick = {isDialogVisible = true})
+            PokemonList(pokemons, onClick = {onItemClick(it)})
         }
     }
 
@@ -327,7 +329,7 @@ fun PokemonList(
             pokemonListPreviewData()
         )
     ),
-    onClick:()-> Unit = {}
+    onClick:(PokedexListEntry)-> Unit = {}
 ) {
 
     val lazyPagingItems = pokemons.collectAsLazyPagingItems()
@@ -363,7 +365,7 @@ fun PokemonList(
             val item = lazyPagingItems[index]
             if (item != null) {
                 Timber.d("pokedexEntry(${item})")
-                PokedexEntry(item)
+                PokedexEntry(item, onClick = {onClick(item)})
             }
         }
         if (lazyPagingItems.loadState.append == LoadState.Loading) {
@@ -386,6 +388,7 @@ fun PokedexEntry(
         "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png",
         200,
     ),
+    onClick: () -> Unit = {}
 ) {
     val defaultDominantColor = MaterialTheme.colorScheme.surface
     var dominantColor by remember {
@@ -396,7 +399,7 @@ fun PokedexEntry(
 
     Box(
         modifier = Modifier
-
+            .clickable { onClick() }
             //When using shadow it should be above the background() to avoid shrinking
             .shadow(8.dp, shape = RoundedCornerShape(8.dp), clip = false)
             .background(Color.White, shape = RoundedCornerShape(8.dp))

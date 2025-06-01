@@ -21,7 +21,7 @@ data class Sprites(
     @SerializedName("front_shiny_female")
     val frontShinyFemale: Any,
     @SerializedName("other")
-    val other: com.example.composepokedex.data.model.response.Other,
+    val other: Other,
     @SerializedName("versions")
-    val versions: com.example.composepokedex.data.model.response.Versions
+    val versions: Versions
 )

@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class GenerationVii(
     @SerializedName("icons")
-    val icons: com.example.composepokedex.data.model.response.Icons,
+    val icons: Icons,
     @SerializedName("ultra-sun-ultra-moon")
-    val ultraSunUltraMoon: com.example.composepokedex.data.model.response.UltraSunUltraMoon
+    val ultraSunUltraMoon: UltraSunUltraMoon
 )

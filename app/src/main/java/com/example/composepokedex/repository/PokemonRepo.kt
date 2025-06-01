@@ -1,18 +1,17 @@
-package com.example.composepokedex.repository;
+package com.example.composepokedex.repository
 
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import com.example.composepokedex.data.api.common.process
+import com.example.composepokedex.data.api.service.PokeService
 import com.example.composepokedex.data.db.PokemonDb
+import com.example.composepokedex.data.model.PokedexListEntry
 import com.example.composepokedex.data.model.response.Pokemon
 import com.example.composepokedex.data.model.response.PokemonList
 import com.example.composepokedex.data.model.response.PokemonName
 import com.example.composepokedex.data.model.response.Result
-import com.example.composepokedex.data.api.service.PokeService
-import com.example.composepokedex.data.db.PokemonDao
-import com.example.composepokedex.data.model.PokedexListEntry
-import com.example.composepokedex.data.paging.PokedexPagingSource
 import com.example.composepokedex.data.paging.PokemonListPagingSource
 import com.example.composepokedex.util.Constants.PAGE_SIZE
 import com.example.composepokedex.util.Response
@@ -30,8 +29,8 @@ interface IPokemonRepo {
     suspend fun getPokemonList(limit: Int, offset: Int): Response<PokemonList>
 
     suspend fun getPokemonListf(limit: Int, offset: Int): Flow<Response<PokemonList>>
-    suspend fun getPokemonInfo(pokemonName: String): Response<Pokemon>
-    suspend fun getPokemonInfof(pokemonName: String): Flow<Response<Pokemon>>
+//    suspend fun getPokemonInfo(pokemonName: String): Response<Pokemon>
+    suspend fun getPokemonInfo(pokemonName: String): Flow<Pokemon>
     fun getPokemonListViaPaging(): Flow<PagingData<Result>>
     suspend fun insertPokemonList(pokemons: List<PokemonName>)
     suspend fun getPokemonNameList(name: String): Flow<List<PokemonName>>
@@ -119,7 +118,7 @@ class PokemonRepo @Inject constructor(
                 emit(Response.Error("${e.message}"))
             }
         }
-
+/*
     override suspend fun getPokemonInfo(pokemonName: String): Response<Pokemon> {
         val response = try {
             PokeApi.getPokemonInfo(pokemonName)
@@ -127,18 +126,13 @@ class PokemonRepo @Inject constructor(
             return Response.Error("An unknown error occured")
         }
         return Response.Success(response)
-    }
+    }*/
 
-    override suspend fun getPokemonInfof(pokemonName: String): Flow<Response<Pokemon>> = flow{
-        try {
-            val data = PokeApi.getPokemonInfo(pokemonName)
-            emit(Response.Success(data))
-        } catch (e: Exception){
+    override suspend fun getPokemonInfo(pokemonName: String): Flow<Pokemon> = flow{
 
-            emit(Response.Error("${e.message}"))
-        } catch (e: HttpException){
-            emit(Response.Error("${e.message}"))
-        }
+            val result = PokeApi.getPokemonInfo(pokemonName).process()
+            emit(result)
+
     }
 
     override fun getPokemonListViaPaging(): Flow<PagingData<Result>> {

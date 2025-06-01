@@ -5,11 +5,11 @@ import com.google.gson.annotations.SerializedName
 
 data class Other(
     @SerializedName("dream_world")
-    val dreamWorld: com.example.composepokedex.data.model.response.DreamWorld,
+    val dreamWorld: DreamWorld,
     @SerializedName("home")
-    val home: com.example.composepokedex.data.model.response.Home,
+    val home: Home,
     @SerializedName("official-artwork")
-    val officialArtwork: com.example.composepokedex.data.model.response.OfficialArtwork,
+    val officialArtwork: OfficialArtwork,
     @SerializedName("showdown")
-    val showdown: com.example.composepokedex.data.model.response.Showdown
+    val showdown: Showdown
 )

@@ -15,7 +15,7 @@ fun MediumButton(
     val buttonModifier = modifier?:Modifier
     Button(
         content = {
-            Row() {}
+            Row {}
         },
         onClick = {
             

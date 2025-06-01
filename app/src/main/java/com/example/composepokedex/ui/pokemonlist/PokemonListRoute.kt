@@ -1,32 +1,26 @@
 package com.example.composepokedex.ui.pokemonlist
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
-import com.example.composepokedex.data.handlers.Loghandler
-import com.example.composepokedex.data.model.ParsedPokemon
-import com.example.composepokedex.data.model.PokedexListEntry
+import androidx.navigation.NavHostController
+import com.example.composepokedex.ui.pokemonstats.PokemonStats
+import com.example.composepokedex.ui.pokemonstats.PokemonStatsViewmodel
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonArray
-import kotlinx.serialization.json.JsonBuilder
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.jsonArray
-import ph.theorangeco.data.models.states.isSuccess
-import timber.log.Timber
 
 @Serializable
 object PokemonList
 @OptIn(ExperimentalSerializationApi::class)
 @Composable
-fun PokemonListRoute(navBackStackEntry: NavBackStackEntry) {
+fun PokemonListRoute(navBackStackEntry: NavBackStackEntry, navController: NavHostController) {
+
     val viewModel = hiltViewModel<PokemonListViewmodel>()
+    val viewModel2 = hiltViewModel<PokemonStatsViewmodel>()
 
     val pokemonList by remember { mutableStateOf(viewModel.pokemons) }
     val pokemonNameList by viewModel.pokemonNameList.collectAsState()
@@ -35,14 +29,11 @@ fun PokemonListRoute(navBackStackEntry: NavBackStackEntry) {
         pokemonList,
         onSearchBarTextChange = {
             viewModel.getPokemonNameSuggestion(it)
-        }
+        },
+        onItemClick = {navController.navigate(PokemonStats(it.pokemonName))}
         
     )
-    LaunchedEffect(pokemonNameList) {
 
-        if (pokemonNameList.isSuccess())
-        Timber.tag("POKEMON_APP").d(pokemonNameList.toString())
-    }
 
 
 }

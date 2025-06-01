@@ -7,5 +7,5 @@ data class GameIndice(
     @SerializedName("game_index")
     val gameIndex: Int,
     @SerializedName("version")
-    val version: com.example.composepokedex.data.model.response.Version
+    val version: Version
 )
