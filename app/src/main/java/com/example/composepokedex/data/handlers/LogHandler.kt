@@ -2,7 +2,7 @@ package com.example.composepokedex.data.handlers
 
 import timber.log.Timber
 
-object Loghandler {
+object LogHandler {
     private const val tag = "POKEMON_APP"
 
     fun e(ex: Exception){

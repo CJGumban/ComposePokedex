@@ -4,14 +4,8 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.composepokedex.data.handlers.Loghandler
-import com.example.composepokedex.data.model.ParsedPokemon
 import com.example.composepokedex.data.model.PokedexListEntry
 import com.example.composepokedex.data.model.response.PokemonName
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.serialization.json.Json
 import timber.log.Timber
 import java.util.concurrent.Executors
 
@@ -30,7 +24,7 @@ abstract class PokemonDb : RoomDatabase() {
                     INSTANCE = Room.databaseBuilder(
                         context.applicationContext,
                         PokemonDb::class.java, "pokemon-db.db")
-                        .createFromAsset("pokemon-db2_db.db")
+                        .createFromAsset("pokemon-db_init.db")
                         .fallbackToDestructiveMigration(true)
                         .setQueryCallback({ sqlQuery, bindArgs ->
                             Timber.tag("ROOM_QUERY SQL").d("ROOM_QUERY SQL: $sqlQuery \nArgs: $bindArgs")

@@ -2,7 +2,7 @@ package ph.theorangeco.data.models.states
 
 open class UiState {
     data object Initial : UiState()
-    data object Processing : UiState()
+    data object Loading : UiState()
     data object NoData : UiState()
     data class Success(val any: Any? = null) : UiState()
     data class Invalid(var msg: String): UiState()
@@ -16,7 +16,7 @@ open class UiState {
 
 
 fun UiState.isInitial() = this is UiState.Initial
-fun UiState.isProcessing() = this is UiState.Processing
+fun UiState.isProcessing() = this is UiState.Loading
 fun UiState.isSuccess() = this is UiState.Success
 fun UiState.isFailed() = this is UiState.Failed
 

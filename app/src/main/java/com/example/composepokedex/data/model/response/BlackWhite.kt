@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class BlackWhite(
     @SerializedName("animated")
-    val animated: com.example.composepokedex.data.model.response.Animated,
+    val animated: Animated,
     @SerializedName("back_default")
     val backDefault: String,
     @SerializedName("back_female")

@@ -5,9 +5,9 @@ import com.google.gson.annotations.SerializedName
 
 data class GenerationIi(
     @SerializedName("crystal")
-    val crystal: com.example.composepokedex.data.model.response.Crystal,
+    val crystal: Crystal,
     @SerializedName("gold")
-    val gold: com.example.composepokedex.data.model.response.Gold,
+    val gold: Gold,
     @SerializedName("silver")
-    val silver: com.example.composepokedex.data.model.response.Silver
+    val silver: Silver
 )

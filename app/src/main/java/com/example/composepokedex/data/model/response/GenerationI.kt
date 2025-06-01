@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class GenerationI(
     @SerializedName("red-blue")
-    val redBlue: com.example.composepokedex.data.model.response.RedBlue,
+    val redBlue: RedBlue,
     @SerializedName("yellow")
-    val yellow: com.example.composepokedex.data.model.response.Yellow
+    val yellow: Yellow
 )

@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class HeldItem(
     @SerializedName("item")
-    val item: com.example.composepokedex.data.model.response.Item,
+    val item: Item,
     @SerializedName("version_details")
-    val versionDetails: List<com.example.composepokedex.data.model.response.VersionDetail>
+    val versionDetails: List<VersionDetail>
 )

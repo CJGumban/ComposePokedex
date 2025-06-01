@@ -7,5 +7,5 @@ data class VersionDetail(
     @SerializedName("rarity")
     val rarity: Int,
     @SerializedName("version")
-    val version: com.example.composepokedex.data.model.response.Version
+    val version: Version
 )

@@ -3,45 +3,28 @@ package com.example.composepokedex.ui.pokemonlist
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.palette.graphics.Palette
-import com.example.composepokedex.data.model.PokedexListEntry
-import com.example.composepokedex.data.api.service.PokeService
-import com.example.composepokedex.data.db.PokemonDao
-import com.example.composepokedex.data.model.response.Result
 import com.example.composepokedex.repository.PokemonRepo
-import com.example.composepokedex.util.Constants.PAGE_SIZE
-import com.example.composepokedex.util.Response
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.launch
 import ph.theorangeco.data.models.states.UiState
 import javax.inject.Inject
 
 @HiltViewModel
 class PokemonListViewmodel @Inject constructor(
     private val repo: PokemonRepo,
-        private val pokeApi: PokeService
 ): ViewModel(){
 
     private var curPage = 0
@@ -182,7 +165,7 @@ class PokemonListViewmodel @Inject constructor(
 
     fun calcDominantColor(drawable: Drawable, onFinish: (Color) -> Unit){
         val bmp = (drawable as BitmapDrawable).bitmap.copy(Bitmap.Config.ARGB_8888, true)
-        Palette.from(bmp).generate(){palette ->
+        Palette.from(bmp).generate { palette ->
             palette?.dominantSwatch?.rgb?.let { colorValue ->
                 onFinish(Color(colorValue))
             }

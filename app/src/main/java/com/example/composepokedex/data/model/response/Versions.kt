@@ -5,19 +5,19 @@ import com.google.gson.annotations.SerializedName
 
 data class Versions(
     @SerializedName("generation-i")
-    val generationI: com.example.composepokedex.data.model.response.GenerationI,
+    val generationI: GenerationI,
     @SerializedName("generation-ii")
-    val generationIi: com.example.composepokedex.data.model.response.GenerationIi,
+    val generationIi: GenerationIi,
     @SerializedName("generation-iii")
-    val generationIii: com.example.composepokedex.data.model.response.GenerationIii,
+    val generationIii: GenerationIii,
     @SerializedName("generation-iv")
-    val generationIv: com.example.composepokedex.data.model.response.GenerationIv,
+    val generationIv: GenerationIv,
     @SerializedName("generation-v")
-    val generationV: com.example.composepokedex.data.model.response.GenerationV,
+    val generationV: GenerationV,
     @SerializedName("generation-vi")
-    val generationVi: com.example.composepokedex.data.model.response.GenerationVi,
+    val generationVi: GenerationVi,
     @SerializedName("generation-vii")
-    val generationVii: com.example.composepokedex.data.model.response.GenerationVii,
+    val generationVii: GenerationVii,
     @SerializedName("generation-viii")
-    val generationViii: com.example.composepokedex.data.model.response.GenerationViii
+    val generationViii: GenerationViii
 )
